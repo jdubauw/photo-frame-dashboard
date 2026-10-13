@@ -1,0 +1,13 @@
+PRAGMA foreign_keys = ON;
+CREATE TABLE people (id TEXT PRIMARY KEY, name TEXT NOT NULL, color TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1);
+CREATE TABLE chores (id TEXT PRIMARY KEY, title TEXT NOT NULL, person_id TEXT REFERENCES people(id), points INTEGER NOT NULL CHECK(points BETWEEN 0 AND 1000), recurrence TEXT NOT NULL CHECK(recurrence IN ('daily','weekly','once')), start_date TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 1);
+CREATE TABLE completions (id TEXT PRIMARY KEY, chore_id TEXT NOT NULL REFERENCES chores(id), person_id TEXT NOT NULL REFERENCES people(id), period TEXT NOT NULL, points INTEGER NOT NULL, title TEXT NOT NULL, completed_at TEXT NOT NULL, UNIQUE(chore_id, period));
+CREATE TABLE settings (id INTEGER PRIMARY KEY CHECK(id=1), value TEXT NOT NULL);
+INSERT INTO settings VALUES (1, '{"familyName":"Our family","timezone":"America/Chicago","albumUrl":"","photoSeconds":20,"shuffle":true,"haUrl":"","haEntities":[],"frameCompletion":false}');
+CREATE TABLE secrets (name TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE sessions (token_hash TEXT PRIMARY KEY, role TEXT NOT NULL, expires INTEGER NOT NULL);
+CREATE TABLE pairing (code_hash TEXT PRIMARY KEY, expires INTEGER NOT NULL);
+CREATE TABLE oauth_states (state TEXT PRIMARY KEY, session_hash TEXT NOT NULL, person_id TEXT NOT NULL, expires INTEGER NOT NULL);
+CREATE TABLE google_accounts (id TEXT PRIMARY KEY, person_id TEXT NOT NULL REFERENCES people(id), email TEXT NOT NULL, refresh_token TEXT NOT NULL, calendars TEXT NOT NULL DEFAULT '[]');
+CREATE TABLE integration_cache (name TEXT PRIMARY KEY, value TEXT NOT NULL, updated INTEGER NOT NULL);
+CREATE TABLE attempts (bucket TEXT PRIMARY KEY, count INTEGER NOT NULL);
