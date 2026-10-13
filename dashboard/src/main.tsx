@@ -851,7 +851,7 @@ function Admin({
         api("/admin/settings"),
         api("/admin/google"),
       ]);
-      setConfig({ ...c, haToken: "" });
+      setConfig({ ...c, haToken: "", haEntitiesText: c.haEntities.join("\n") });
       setAccounts(a);
     } catch (e) {
       setError((e as Error).message);
@@ -1221,7 +1221,15 @@ function Admin({
           className="card settings-form"
           onSubmit={(e) => {
             e.preventDefault();
-            action(() => api("/admin/settings", "PUT", config));
+            action(() =>
+              api("/admin/settings", "PUT", {
+                ...config,
+                haEntities: config.haEntitiesText
+                  .split("\n")
+                  .map((x: string) => x.trim())
+                  .filter(Boolean),
+              }),
+            );
           }}
         >
           {tab === "photos" && (
@@ -1320,14 +1328,11 @@ function Admin({
                 Entity IDs, one per line
                 <textarea
                   rows={8}
-                  value={config.haEntities.join("\n")}
+                  value={config.haEntitiesText}
                   onChange={(e) =>
                     setConfig({
                       ...config,
-                      haEntities: e.target.value
-                        .split("\n")
-                        .map((x) => x.trim())
-                        .filter(Boolean),
+                      haEntitiesText: e.target.value,
                     })
                   }
                   placeholder={
