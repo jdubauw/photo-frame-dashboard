@@ -3,6 +3,8 @@
   "name": "home-dashboard",
   "main": "server/worker.ts",
   "compatibility_date": "2026-09-30",
+  // Runtime variables are managed in the Cloudflare dashboard.
+  "keep_vars": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

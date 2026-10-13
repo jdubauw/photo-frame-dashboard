@@ -30,6 +30,7 @@ test("production configuration handles the actual formatted JSONC and comments",
     assert.equal(config.d1_databases.find((d) => d.binding === "DB").database_id, databaseId);
     assert.deepEqual(config.assets.run_worker_first, ["/api/*"]);
     assert.equal(config.main, "server/worker.ts");
+    assert.equal(config.keep_vars, true, "Deployments must preserve dashboard-managed variables");
     assert.deepEqual(config.triggers.crons, ["0 4 * * *"]);
   });
 });

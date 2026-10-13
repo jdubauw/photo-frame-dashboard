@@ -46,7 +46,7 @@ jobs:
           npm run db:local
           npm run dev:api > /tmp/household-worker.log 2>&1 &
           worker_pid=$!
-          trap 'kill "$worker_pid" 2>/dev/null || true' EXIT
+          trap 'kill "$worker_pid" 2>/dev/null || true; rm -f .dev.vars' EXIT
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:8787/api/auth/session > /dev/null; then break; fi
             sleep 1

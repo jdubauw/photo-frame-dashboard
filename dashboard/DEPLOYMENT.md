@@ -1,5 +1,13 @@
 # React household dashboard
 
+Runtime variables are managed in the Cloudflare dashboard. `keep_vars: true`
+preserves dashboard-set values such as `GOOGLE_CLIENT_ID` on deployment, and the
+configuration-generation test verifies that this reaches the production config.
+Wrangler also preserves existing encrypted secrets on normal deployments. This
+workflow does not upload, replace, delete, or rotate runtime secrets. CI's local
+test credentials are removed before the deployment step. Keep the existing
+`TOKEN_ENCRYPTION_KEY` stable so stored account tokens remain decryptable.
+
 The frame opens `/`; browser editing is at `/admin`. React retains Wes's paper/ink palette, large clock, serif headlines, golden event panel, and sidebar. JavaScript targets Chromium 106 and CSS targets Chrome 61 for frame compatibility. The Worker serves the app and private API. D1 stores household data, points, encrypted integration credentials, and revocable sessions. Production starts empty.
 
 ## Cloudflare setup
