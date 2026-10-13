@@ -2,3 +2,9 @@ node_modules
 dist
 .wrangler
 kiosk/build
+
+.dev.vars
+.env
+.env.*
+!.env.example
+wrangler.deploy.json

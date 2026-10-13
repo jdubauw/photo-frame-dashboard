@@ -4,13 +4,30 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "deploy": "vite build && wrangler deploy"
+    "deploy": "npm run build && node scripts/configure-deployment.mjs && wrangler d1 migrations apply household --remote --config wrangler.deploy.json && wrangler deploy --config wrangler.deploy.json",
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test server/domain.test.ts",
+    "dev:api": "wrangler dev --port 8787",
+    "db:local": "wrangler d1 migrations apply household --local",
+    "db:remote": "wrangler d1 migrations apply household --remote",
+    "test:integration": "node server/integration.test.mjs"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261013.1",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "wrangler": "^4.145.0"
+  },
+  "dependencies": {
+    "lucide-react": "^1.56.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   }
 }
